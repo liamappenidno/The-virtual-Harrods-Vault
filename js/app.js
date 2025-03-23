@@ -1,34 +1,42 @@
+// Set up the scene
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000);
 
+// Set up the camera
 const camera = new THREE.PerspectiveCamera(
-  75, window.innerWidth / window.innerHeight, 0.1, 1000
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
 );
 camera.position.z = 5;
 
-const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('scene') });
+// Set up the renderer
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
+// Create a cube
 const geometry = new THREE.BoxGeometry();
 const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
-// Position & rotation to help visibility
-cube.position.set(1, 1, 0);
-cube.rotation.set(Math.PI / 4, Math.PI / 4, 0);
+// Handle resizing
+window.addEventListener("resize", () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
 
-// Optional: add light if you switch to MeshStandardMaterial later
-const light = new THREE.AmbientLight(0xffffff);
-scene.add(light);
-
+// Animation loop
 function animate() {
   requestAnimationFrame(animate);
+
+  // Rotate the cube
   cube.rotation.x += 0.01;
   cube.rotation.y += 0.01;
+
   renderer.render(scene, camera);
 }
 
 animate();
-
-console.log('Scene loaded, cube added:', cube);
