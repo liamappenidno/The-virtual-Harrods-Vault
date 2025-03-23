@@ -13,6 +13,7 @@ camera.position.z = 5;
 // Set up the renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x202020); // Set a different background color
 document.body.appendChild(renderer.domElement);
 
 // Create a cube
