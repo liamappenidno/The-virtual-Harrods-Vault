@@ -1,35 +1,45 @@
-// Set up the scene
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
 
-// Set up the camera
-const camera = new THREE.PerspectiveCamera(
-  75,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
-camera.position.z = 5;
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 10;
 
-// Set up the renderer
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Create a cube
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+// Add light
+const light = new THREE.PointLight(0xffffff, 1.5, 100);
+light.position.set(10, 10, 10);
+scene.add(light);
 
-// Render the scene
+// Shop brand cubes
+const brands = [
+  { name: 'Dior', color: '#e6e6e6', position: [-6, 0, 0] },
+  { name: 'Gucci', color: '#3a5d3e', position: [-2, 0, 0] },
+  { name: 'Hermès', color: '#ff6f00', position: [2, 0, 0] },
+  { name: 'Balenciaga', color: '#ffffff', position: [6, 0, 0] }
+];
+
+brands.forEach(brand => {
+  const geometry = new THREE.BoxGeometry(2, 2, 2);
+  const material = new THREE.MeshStandardMaterial({ color: brand.color });
+  const cube = new THREE.Mesh(geometry, material);
+  cube.position.set(...brand.position);
+  scene.add(cube);
+});
+
+// Animate scene
 function animate() {
   requestAnimationFrame(animate);
-
-  // Rotate the cube
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-
   renderer.render(scene, camera);
 }
 
 animate();
+
+// Handle resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
