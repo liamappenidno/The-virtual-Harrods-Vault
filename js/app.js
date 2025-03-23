@@ -14,6 +14,14 @@ const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube);
 
+// Position & rotation to help visibility
+cube.position.set(1, 1, 0);
+cube.rotation.set(Math.PI / 4, Math.PI / 4, 0);
+
+// Optional: add light if you switch to MeshStandardMaterial later
+const light = new THREE.AmbientLight(0xffffff);
+scene.add(light);
+
 function animate() {
   requestAnimationFrame(animate);
   cube.rotation.x += 0.01;
@@ -22,3 +30,5 @@ function animate() {
 }
 
 animate();
+
+console.log('Scene loaded, cube added:', cube);
